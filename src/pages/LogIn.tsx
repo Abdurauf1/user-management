@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { api } from "../api/api";
@@ -15,7 +15,7 @@ const initialState = {
 const LogIn = () => {
   const [user, setUser] = useState(initialState);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const { email, password, login_time } = user;
     axios
@@ -26,7 +26,7 @@ const LogIn = () => {
       })
       .then(response => {
         if (response.data.success) {
-          sessionStorage.setItem("isLoggedIn", true);
+          sessionStorage.setItem("isLoggedIn", "true");
           window.location.href = "/";
         } else {
           toast.error(response.data.message, { autoClose: 2500 });
@@ -35,7 +35,7 @@ const LogIn = () => {
       .catch(error => console.log(error));
     setUser({ email: "", password: "", login_time: "" });
   };
-  const handleInputChange = e => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
