@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
+import { useState } from "react";
+import { Button, Container, Form } from "react-bootstrap";
 import { api } from "../api/api";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -29,7 +29,7 @@ const Register = () => {
 
   const { name, email, password, reg_time, login_time, status } = state;
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     axios
       .post(`${api}/register/`, {
@@ -56,7 +56,7 @@ const Register = () => {
     setState({ name: "", email: "", password: "", reg_time: "", login_time: "", status: "" });
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
@@ -67,7 +67,7 @@ const Register = () => {
       <Form
         id="responsive-form"
         method="POST"
-        onSubmit={handleSubmit}
+        onSubmit={() => handleSubmit}
         className="mt-5 w-50 mx-auto bg-white p-5 pb-3 rounded"
       >
         <h2 className="mb-4 fs-2">Registration</h2>
