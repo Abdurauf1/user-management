@@ -1,5 +1,5 @@
 interface Props {
-  id: string;
+  id?: string;
   onClick: () => void;
 }
 

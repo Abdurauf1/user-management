@@ -1,9 +1,10 @@
 import { Button } from "react-bootstrap";
+import { ReactNode } from "react";
 
 interface Props {
   type: string;
   color: string;
-  icon: string;
+  icon: ReactNode;
   onClick: () => void;
 }
 

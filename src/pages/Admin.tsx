@@ -1,23 +1,23 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import ButtonComponent from "../components/ButtonComponent";
 import Checkbox from "../components/Checkbox";
-import { ToastContainer, toast } from "react-toastify";
 
 const AdminPage = () => {
   const [data, setData] = useState([]);
-  const [checked, setChecked] = useState([]);
-  const [checkAll, setCheckAll] = useState(false);
+  const [checked, setChecked] = useState<string[]>([]);
+  const [checkAll, setCheckAll] = useState<boolean>(false);
 
   const loadData = async () => {
     const res = await axios.get(`${api}/users/`);
     setData(res.data);
   };
 
-  const select = e => {
+  const select = (e: any) => {
     const { id, checked } = e.target;
     if (checked) {
       setChecked(pre => [...pre, id]);
@@ -28,7 +28,7 @@ const AdminPage = () => {
     }
   };
 
-  const selectAll = e => {
+  const selectAll = (e: any) => {
     console.log(checkAll);
   };
 
@@ -105,7 +105,7 @@ const AdminPage = () => {
         <thead>
           <tr>
             <th>
-              <Checkbox onClick={selectAll} />
+              <Checkbox onClick={() => selectAll} />
             </th>
             <th>ID</th>
             <th>Name</th>
@@ -121,7 +121,7 @@ const AdminPage = () => {
             return (
               <tr key={id}>
                 <td>
-                  <Checkbox onClick={select} id={id} />
+                  <Checkbox onClick={() => select} id={id} />
                 </td>
                 <td>{id}</td>
                 <td>{name}</td>
