@@ -10,7 +10,7 @@ import Checkbox from "../components/Checkbox";
 const AdminPage = () => {
   const [data, setData] = useState([]);
   const [checked, setChecked] = useState<string[]>([]);
-  const [checkAll, setCheckAll] = useState<boolean>(false);
+  const [_checkAll, _setCheckAll] = useState<boolean>(false);
 
   const loadData = async () => {
     const res = await axios.get(`${api}/users/`);
@@ -28,9 +28,7 @@ const AdminPage = () => {
     }
   };
 
-  const selectAll = (e: any) => {
-    console.log(checkAll);
-  };
+  const selectAll = (_e: any) => {};
 
   const blockUser = () => {
     const status = "blocked";
@@ -117,22 +115,24 @@ const AdminPage = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.map(user => {
-            const { id, name, email, reg_time, login_time, status } = user;
-            return (
-              <tr key={id}>
-                <td>
-                  <Checkbox onClick={() => select} id={id} />
-                </td>
-                <td>{id}</td>
-                <td>{name}</td>
-                <td>{email}</td>
-                <td>{reg_time}</td>
-                <td>{login_time}</td>
-                <td>{status}</td>
-              </tr>
-            );
-          })}
+          {Array.isArray(data)
+            ? data.map(user => {
+                const { id, name, email, reg_time, login_time, status } = user;
+                return (
+                  <tr key={id}>
+                    <td>
+                      <Checkbox onClick={() => select} id={id} />
+                    </td>
+                    <td>{id}</td>
+                    <td>{name}</td>
+                    <td>{email}</td>
+                    <td>{reg_time}</td>
+                    <td>{login_time}</td>
+                    <td>{status}</td>
+                  </tr>
+                );
+              })
+            : null}
         </tbody>
       </Table>
     </Container>

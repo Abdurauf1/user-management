@@ -4,7 +4,8 @@ import LogIn from "./pages/LogIn";
 import Register from "./pages/Register";
 
 function App() {
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const isLoggedIn = "true";
+  // const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   return (
     <BrowserRouter>
       <Routes>
