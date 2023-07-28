@@ -82,6 +82,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     loadData();
+    console.log(data);
   }, []);
 
   return (
@@ -116,7 +117,7 @@ const AdminPage = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map(user => {
+          {data?.map(user => {
             const { id, name, email, reg_time, login_time, status } = user;
             return (
               <tr key={id}>
