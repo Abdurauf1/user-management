@@ -80,7 +80,6 @@ const AdminPage = () => {
 
   useEffect(() => {
     loadData();
-    console.log(data);
   }, []);
 
   return (
@@ -115,24 +114,26 @@ const AdminPage = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(data)
-            ? data.map(user => {
-                const { id, name, email, reg_time, login_time, status } = user;
-                return (
-                  <tr key={id}>
-                    <td>
-                      <Checkbox onClick={() => select} id={id} />
-                    </td>
-                    <td>{id}</td>
-                    <td>{name}</td>
-                    <td>{email}</td>
-                    <td>{reg_time}</td>
-                    <td>{login_time}</td>
-                    <td>{status}</td>
-                  </tr>
-                );
-              })
-            : null}
+          {Array.isArray(data) ? (
+            data.map(user => {
+              const { _id, name, email, reg_time, last_login_time, status } = user;
+              return (
+                <tr key={_id}>
+                  <td>
+                    <Checkbox onClick={() => select} id={_id} />
+                  </td>
+                  <td>{_id}</td>
+                  <td>{name}</td>
+                  <td>{email}</td>
+                  <td>{reg_time}</td>
+                  <td>{last_login_time}</td>
+                  <td>{status}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <h1>Loading...</h1>
+          )}
         </tbody>
       </Table>
     </Container>

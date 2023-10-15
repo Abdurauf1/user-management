@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdminPage from "./pages/Admin";
-import LogIn from "./pages/LogIn";
-import Register from "./pages/Register";
+import { AdminPage, LogIn, Register } from "./pages/index";
 
 function App() {
   const isLoggedIn = "true";
