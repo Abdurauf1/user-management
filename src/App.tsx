@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AdminPage, LogIn, Register } from "./pages/index";
 
 function App() {
-  const isLoggedIn = "true";
-  // const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   return (
     <BrowserRouter>
       <Routes>

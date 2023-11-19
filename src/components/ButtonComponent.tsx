@@ -1,14 +1,7 @@
 import { Button } from "react-bootstrap";
-import { ReactNode } from "react";
+import { ButtonComponentType } from "../types";
 
-interface Props {
-  type: string;
-  color: string;
-  icon: ReactNode;
-  onClick: () => void;
-}
-
-const ButtonComponent = ({ onClick, type, color, icon }: Props) => {
+const ButtonComponent = ({ onClick, type, color, icon }: ButtonComponentType) => {
   const iconStyle = {
     fontSize: "18px",
     marginRight: "5px",

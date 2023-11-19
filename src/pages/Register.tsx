@@ -4,6 +4,7 @@ import { Button, Container, Form } from "react-bootstrap";
 import { api } from "../api/api";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { InitialState } from "../types";
 
 // global time and date function
 const now = new Date();
@@ -13,9 +14,10 @@ const date = now.toLocaleDateString("en-EN", {
   day: "2-digit",
   year: "numeric",
 });
+
 export const timeAndDate = date + " " + time;
 
-const initialState = {
+const initialState: InitialState = {
   name: "",
   email: "",
   password: "",
@@ -25,7 +27,7 @@ const initialState = {
 };
 
 const Register = () => {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<InitialState>(initialState);
 
   const { name, email, password, reg_time, login_time, status } = state;
 
