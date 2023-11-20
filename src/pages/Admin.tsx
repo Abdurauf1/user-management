@@ -116,7 +116,7 @@ const AdminPage = () => {
         <tbody>
           {Array.isArray(data) ? (
             data.map(user => {
-              const { _id, name, email, reg_time, last_login_time, status } = user;
+              const { _id, name, email, reg_time, login_time, activityStatus } = user;
               return (
                 <tr key={_id}>
                   <td>
@@ -126,8 +126,8 @@ const AdminPage = () => {
                   <td>{name}</td>
                   <td>{email}</td>
                   <td>{reg_time}</td>
-                  <td>{last_login_time}</td>
-                  <td>{status}</td>
+                  <td>{login_time}</td>
+                  <td>{activityStatus}</td>
                 </tr>
               );
             })

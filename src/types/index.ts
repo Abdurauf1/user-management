@@ -6,7 +6,7 @@ export interface InitialState {
     password: string,
     reg_time: string,
     login_time: string,
-    status: string,
+    activityStatus: string,
 }
 
 export interface ButtonComponentType {

@@ -23,13 +23,13 @@ const initialState: InitialState = {
   password: "",
   reg_time: timeAndDate,
   login_time: "Is not logged in yet",
-  status: "active",
+  activityStatus: "active",
 };
 
 const Register = () => {
   const [state, setState] = useState<InitialState>(initialState);
 
-  const { name, email, password, reg_time, login_time, status } = state;
+  const { name, email, password, reg_time, login_time, activityStatus } = state;
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ const Register = () => {
         password,
         reg_time,
         login_time,
-        status,
+        activityStatus,
       })
       .then(response => {
         if (!response.data.success) {
@@ -55,7 +55,7 @@ const Register = () => {
         }
       })
       .catch(error => console.log(error));
-    setState({ name: "", email: "", password: "", reg_time: "", login_time: "", status: "" });
+    setState(initialState);
   };
 
   const handleInputChange = (e: any) => {
@@ -69,7 +69,7 @@ const Register = () => {
       <Form
         id="responsive-form"
         method="POST"
-        onSubmit={() => handleSubmit}
+        onSubmit={handleSubmit}
         className="mt-5 w-50 mx-auto bg-white p-5 pb-3 rounded"
       >
         <h2 className="mb-4 fs-2">Registration</h2>
