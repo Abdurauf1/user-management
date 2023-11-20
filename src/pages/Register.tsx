@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { api } from "../api/api";
 import { Link } from "react-router-dom";
@@ -31,7 +31,7 @@ const Register = () => {
 
   const { name, email, password, reg_time, login_time, activityStatus } = state;
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     axios
       .post(`${api}/register/`, {
@@ -58,7 +58,7 @@ const Register = () => {
     setState(initialState);
   };
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
