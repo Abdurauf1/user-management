@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { api } from "../api/api";
@@ -15,7 +15,7 @@ const initialState = {
 const LogIn = () => {
   const [user, setUser] = useState(initialState);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { email, password, login_time } = user;
     axios
@@ -33,9 +33,9 @@ const LogIn = () => {
         }
       })
       .catch(error => console.log(error));
-    setUser({ email: "", password: "", login_time: "" });
+    setUser(initialState);
   };
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
