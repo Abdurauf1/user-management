@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
 import { ToastContainer, toast } from "react-toastify";
+import { ButtonComponent, Checkbox } from "../components";
 import axios from "axios";
-import ButtonComponent from "../components/ButtonComponent";
-import Checkbox from "../components/Checkbox";
 
 const AdminPage = () => {
   const [data, setData] = useState([]);
@@ -17,7 +16,7 @@ const AdminPage = () => {
     setData(res.data);
   };
 
-  const select = (e: any) => {
+  const select = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
     if (checked) {
       setChecked(pre => [...pre, id]);
@@ -28,7 +27,7 @@ const AdminPage = () => {
     }
   };
 
-  const selectAll = (_e: any) => {};
+  const selectAll = (_e: ChangeEvent<HTMLInputElement>) => {};
 
   const blockUser = () => {
     const status = "blocked";
@@ -75,7 +74,7 @@ const AdminPage = () => {
 
   const signOut = () => {
     sessionStorage.clear();
-    window.location.href = "/";
+    location.reload();
   };
 
   useEffect(() => {

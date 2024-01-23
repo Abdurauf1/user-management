@@ -1,10 +1,10 @@
-import axios from "axios";
-import React, { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { api } from "../api/api";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { InitialState } from "../types";
+import axios from "axios";
 
 // global time and date function
 const now = new Date();
@@ -31,7 +31,7 @@ const Register = () => {
 
   const { name, email, password, reg_time, login_time, activityStatus } = state;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     axios
       .post(`${api}/register/`, {
@@ -50,7 +50,7 @@ const Register = () => {
             autoClose: 1000,
           });
           setTimeout(() => {
-            window.location.href = "/";
+            location.reload()
           }, 1500);
         }
       })
@@ -58,7 +58,7 @@ const Register = () => {
     setState(initialState);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };

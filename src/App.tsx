@@ -6,7 +6,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={isLoggedIn === "true" ? <AdminPage /> : <LogIn />} />
+        <Route path="/" element={isLoggedIn ? <AdminPage /> : <LogIn />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>

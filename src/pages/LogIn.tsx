@@ -1,10 +1,10 @@
-import axios from "axios";
-import React, { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { api } from "../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { timeAndDate } from "./Register";
+import axios from "axios";
 
 const initialState = {
   email: "",
@@ -15,7 +15,7 @@ const initialState = {
 const LogIn = () => {
   const [user, setUser] = useState(initialState);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { email, password, login_time } = user;
     axios
@@ -27,7 +27,7 @@ const LogIn = () => {
       .then(response => {
         if (response.data.success) {
           sessionStorage.setItem("isLoggedIn", "true");
-          window.location.href = "/";
+          location.reload();
         } else {
           toast.error(response.data.message, { autoClose: 2500 });
         }
@@ -35,7 +35,7 @@ const LogIn = () => {
       .catch(error => console.log(error));
     setUser(initialState);
   };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
