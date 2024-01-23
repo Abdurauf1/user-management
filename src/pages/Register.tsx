@@ -50,7 +50,7 @@ const Register = () => {
             autoClose: 1000,
           });
           setTimeout(() => {
-            location.reload()
+            location.href = "/";
           }, 1500);
         }
       })
