@@ -25,7 +25,9 @@ const LogIn = () => {
         login_time,
       })
       .then(response => {
+        const token = response.data.data;
         if (response.data.success) {
+          sessionStorage.setItem("token", token);
           sessionStorage.setItem("isLoggedIn", "true");
           location.reload();
         } else {
@@ -39,6 +41,7 @@ const LogIn = () => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
+
   return (
     <>
       <Container>
