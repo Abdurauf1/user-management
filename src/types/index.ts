@@ -18,5 +18,5 @@ export interface ButtonComponentType {
 
 export interface CheckboxType {
     id?: string;
-    onClick: () => void;
+    onChange: () => void;
 }

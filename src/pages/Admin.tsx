@@ -3,17 +3,23 @@ import { Container, Table } from "react-bootstrap";
 import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
 import { ToastContainer, toast } from "react-toastify";
-import { ButtonComponent, Checkbox } from "../components";
+import { ButtonComponent, Checkbox, Loading } from "../components";
 import axios from "axios";
 
 const AdminPage = () => {
   const [data, setData] = useState([]);
   const [checked, setChecked] = useState<string[]>([]);
-  const [_checkAll, _setCheckAll] = useState<boolean>(false);
+  const [isLoading, setisLoading] = useState(true);
+  const [checkAll, setCheckAll] = useState<boolean>(false);
 
   const loadData = async () => {
-    const res = await axios.get(`${api}/users/`);
-    setData(res.data);
+    await axios
+      .get(`${api}/users/`)
+      .then(response => {
+        setData(response.data);
+        setisLoading(false);
+      })
+      .catch(error => console.log(error));
   };
 
   const select = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +33,9 @@ const AdminPage = () => {
     }
   };
 
-  const selectAll = (_e: ChangeEvent<HTMLInputElement>) => {};
+  const selectAll = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
+  };
 
   const blockUser = () => {
     const status = "blocked";
@@ -98,30 +106,32 @@ const AdminPage = () => {
         <ButtonComponent onClick={unblockUser} color="success" icon={<Person />} type="Unblock" />
         <ButtonComponent onClick={deleteUser} color="danger" icon={<Trash3 />} type="Delete" />
       </div>
-      <Table striped hover responsive variant="light">
-        <thead>
-          <tr>
-            <th>
-              <Checkbox onClick={() => selectAll} />
-            </th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Registration Time</th>
-            <th>Last Login Time</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(data) ? (
-            data.map(user => {
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Table striped hover responsive variant="light">
+          <thead>
+            <tr>
+              <th>
+                <Checkbox onChange={() => selectAll} />
+              </th>
+              <th>No</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Registration Time</th>
+              <th>Last Login Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((user, index) => {
               const { _id, name, email, reg_time, login_time, activityStatus } = user;
               return (
-                <tr key={_id}>
+                <tr key={index}>
                   <td>
-                    <Checkbox onClick={() => select} id={_id} />
+                    <Checkbox onChange={() => select} id={_id} />
                   </td>
-                  <td>{_id}</td>
+                  <td>{index + 1}</td>
                   <td>{name}</td>
                   <td>{email}</td>
                   <td>{reg_time}</td>
@@ -129,12 +139,10 @@ const AdminPage = () => {
                   <td>{activityStatus}</td>
                 </tr>
               );
-            })
-          ) : (
-            <h1>Loading...</h1>
-          )}
-        </tbody>
-      </Table>
+            })}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 };
