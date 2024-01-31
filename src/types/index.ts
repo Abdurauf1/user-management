@@ -1,22 +1,23 @@
-import { ReactNode } from "react";
+import { ChangeEventHandler, ReactNode } from "react";
 
 export interface InitialState {
-    name: string,
-    email: string,
-    password: string,
-    reg_time: string,
-    login_time: string,
-    activityStatus: string,
+    _id?: string
+    name: string
+    email: string
+    password: string
+    reg_time: string
+    login_time: string
+    activityStatus: string
 }
 
 export interface ButtonComponentType {
-    type: string;
-    color: string;
-    icon: ReactNode;
-    onClick: () => void;
+    type: string
+    color: string
+    icon: ReactNode
+    onClick: () => void
 }
 
 export interface CheckboxType {
-    id?: string;
-    onChange: () => void;
+    id?: string
+    onChange: ChangeEventHandler<HTMLInputElement>
 }

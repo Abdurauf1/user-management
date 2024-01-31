@@ -2,15 +2,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { ButtonComponent, Checkbox, Loading } from "../components";
+import { InitialState } from "../types";
 import axios from "axios";
 
 const AdminPage = () => {
-  const [data, setData] = useState([]);
-  const [checked, setChecked] = useState<string[]>([]);
-  const [isLoading, setisLoading] = useState(true);
-  const [checkAll, setCheckAll] = useState<boolean>(false);
+  const [data, setData] = useState<InitialState[]>([]);
+  const [isLoading, setisLoading] = useState<boolean>(true);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const loadData = async () => {
     await axios
@@ -22,62 +22,59 @@ const AdminPage = () => {
       .catch(error => console.log(error));
   };
 
-  const select = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
     if (checked) {
-      setChecked(pre => [...pre, id]);
+      setSelected((prevId: string[]) => [...prevId, id]);
     } else {
-      setChecked(pre => {
-        return [...pre.filter(id => id !== id)];
+      setSelected((prevId: string[]) => {
+        return [...prevId.filter(id => id !== id)];
       });
     }
   };
 
-  const selectAll = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-  };
-
   const blockUser = () => {
-    const status = "blocked";
-    checked.map(id => {
-      axios
-        .put(`${api}/users/status/${id}`, {
-          status,
-        })
-        .then(() => {
-          toast.error("User blocked successfully", { autoClose: 2500 });
-        })
-        .catch(error => console.log(error));
-    });
-    loadData();
+    // const status = "blocked";
+    // checked.map(id => {
+    //   axios
+    //     .put(`${api}/users/status/${id}`, {
+    //       status,
+    //     })
+    //     .then(() => {
+    //       toast.error("User blocked successfully", { autoClose: 2500 });
+    //     })
+    //     .catch(error => console.log(error));
+    // });
+    // loadData();
   };
 
   const unblockUser = () => {
-    const status = "active";
-    checked.map(id => {
-      axios
-        .put(`${api}/users/status/${id}`, {
-          status,
-        })
-        .then(() => {
-          toast.success("User unblocked successfully", { autoClose: 2500 });
-        })
-        .catch(error => console.log(error));
-    });
-    loadData();
+    // const status = "active";
+    // checked.map(id => {
+    //   axios
+    //     .put(`${api}/users/status/${id}`, {
+    //       status,
+    //     })
+    //     .then(() => {
+    //       toast.success("User unblocked successfully", { autoClose: 2500 });
+    //     })
+    //     .catch(error => console.log(error));
+    // });
+    // loadData();
   };
 
   const deleteUser = () => {
-    checked.map(id => {
-      axios
-        .delete(`${api}/users/delete/${id}`)
-        .then(() => {
-          toast.success("User deleted successfully", { autoClose: 2500 });
-          sessionStorage.clear();
-        })
-        .catch(error => console.log(error));
-    });
-    loadData();
+    // checked.map(id => {
+    //   axios
+    //     .delete(`${api}/users/delete/${id}`)
+    //     .then(() => {
+    //       toast.success("User deleted successfully", { autoClose: 2500 });
+    //       sessionStorage.clear();
+    //     })
+    //     .catch(error => console.log(error));
+    // });
+    // loadData();
+    console.log(selected);
   };
 
   const signOut = () => {
@@ -113,7 +110,7 @@ const AdminPage = () => {
           <thead>
             <tr>
               <th>
-                <Checkbox onChange={() => selectAll} />
+                <Checkbox onChange={handleCheckbox} />
               </th>
               <th>No</th>
               <th>Name</th>
@@ -129,7 +126,7 @@ const AdminPage = () => {
               return (
                 <tr key={index}>
                   <td>
-                    <Checkbox onChange={() => select} id={_id} />
+                    <Checkbox id={_id} onChange={handleCheckbox} />
                   </td>
                   <td>{index + 1}</td>
                   <td>{name}</td>
