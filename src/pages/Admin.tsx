@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { ButtonComponent, Checkbox, Loading } from "../components";
 import { InitialState } from "../types";
 import axios from "axios";
@@ -10,7 +10,8 @@ import axios from "axios";
 const AdminPage = () => {
   const [data, setData] = useState<InitialState[]>([]);
   const [isLoading, setisLoading] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [isCheckAll, setIsCheckAll] = useState<boolean>(false);
+  const [isCheck, setIsCheck] = useState<any>([]);
 
   const loadData = async () => {
     await axios
@@ -22,59 +23,69 @@ const AdminPage = () => {
       .catch(error => console.log(error));
   };
 
-  const handleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.target;
-    if (checked) {
-      setSelected((prevId: string[]) => [...prevId, id]);
-    } else {
-      setSelected((prevId: string[]) => {
-        return [...prevId.filter(id => id !== id)];
-      });
+  const handleSelectAll = () => {
+    setIsCheckAll(!isCheckAll);
+    setIsCheck(data.map(user => user._id));
+    if (isCheckAll) {
+      setIsCheck([]);
     }
   };
 
+  const handleSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) {
+      setIsCheck(isCheck.filter((user: any) => user !== id));
+    }
+    setIsCheckAll(false);
+  };
+
   const blockUser = () => {
-    // const status = "blocked";
-    // checked.map(id => {
-    //   axios
-    //     .put(`${api}/users/status/${id}`, {
-    //       status,
-    //     })
-    //     .then(() => {
-    //       toast.error("User blocked successfully", { autoClose: 2500 });
-    //     })
-    //     .catch(error => console.log(error));
-    // });
-    // loadData();
+    const status = "blocked";
+    isCheck.map((id: string) => {
+      axios
+        .put(`${api}/users/status/${id}`, {
+          status,
+        })
+        .then(response => {
+          if (response.data.success) {
+            toast.error("User blocked successfully", { autoClose: 2500 });
+            loadData();
+          }
+        })
+        .catch(error => console.log(error));
+    });
   };
 
   const unblockUser = () => {
-    // const status = "active";
-    // checked.map(id => {
-    //   axios
-    //     .put(`${api}/users/status/${id}`, {
-    //       status,
-    //     })
-    //     .then(() => {
-    //       toast.success("User unblocked successfully", { autoClose: 2500 });
-    //     })
-    //     .catch(error => console.log(error));
-    // });
-    // loadData();
+    const status = "active";
+    isCheck.map((id: string) => {
+      axios
+        .put(`${api}/users/status/${id}`, {
+          status,
+        })
+        .then(response => {
+          if (response.data.success) {
+            toast.success("User unblocked successfully", { autoClose: 2500 });
+            loadData();
+          }
+        })
+        .catch(error => console.log(error));
+    });
   };
 
   const deleteUser = () => {
-    // checked.map(id => {
-    //   axios
-    //     .delete(`${api}/users/delete/${id}`)
-    //     .then(() => {
-    //       toast.success("User deleted successfully", { autoClose: 2500 });
-    //       sessionStorage.clear();
-    //     })
-    //     .catch(error => console.log(error));
-    // });
-    // loadData();
-    console.log(selected);
+    isCheck.map((id: string) => {
+      axios
+        .delete(`${api}/users/delete/${id}`)
+        .then(response => {
+          if (response.data.success) {
+            toast.success("User deleted successfully", { autoClose: 2500 });
+            loadData();
+          }
+        })
+        .catch(error => console.log(error));
+    });
   };
 
   const signOut = () => {
@@ -110,7 +121,13 @@ const AdminPage = () => {
           <thead>
             <tr>
               <th>
-                <Checkbox onChange={handleCheckbox} />
+                <Checkbox
+                  type="checkbox"
+                  name="selectAll"
+                  id="selectAll"
+                  onChange={handleSelectAll}
+                  isChecked={isCheckAll}
+                />
               </th>
               <th>No</th>
               <th>Name</th>
@@ -124,9 +141,16 @@ const AdminPage = () => {
             {data.map((user, index) => {
               const { _id, name, email, reg_time, login_time, activityStatus } = user;
               return (
-                <tr key={index}>
+                <tr key={_id}>
                   <td>
-                    <Checkbox id={_id} onChange={handleCheckbox} />
+                    <Checkbox
+                      key={_id}
+                      type="checkbox"
+                      name={name}
+                      id={_id}
+                      onChange={handleSelect}
+                      isChecked={isCheck.includes(_id)}
+                    />
                   </td>
                   <td>{index + 1}</td>
                   <td>{name}</td>

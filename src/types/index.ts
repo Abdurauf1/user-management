@@ -19,5 +19,8 @@ export interface ButtonComponentType {
 
 export interface CheckboxType {
     id?: string
+    name: string
+    type: string
+    isChecked: boolean
     onChange: ChangeEventHandler<HTMLInputElement>
 }
