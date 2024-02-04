@@ -11,7 +11,7 @@ const AdminPage = () => {
   const [data, setData] = useState<InitialState[]>([]);
   const [isLoading, setisLoading] = useState<boolean>(true);
   const [isCheckAll, setIsCheckAll] = useState<boolean>(false);
-  const [isCheck, setIsCheck] = useState<any>([]);
+  const [isCheck, setIsCheck] = useState<any[]>([]);
 
   const loadData = async () => {
     await axios
@@ -25,7 +25,7 @@ const AdminPage = () => {
 
   const handleSelectAll = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(data.map(user => user._id));
+    setIsCheck(data.map((user: InitialState) => user._id));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -35,7 +35,7 @@ const AdminPage = () => {
     const { id, checked } = e.target;
     setIsCheck([...isCheck, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter((user: any) => user !== id));
+      setIsCheck(isCheck.filter((userId: string) => userId !== id));
     }
     setIsCheckAll(false);
   };
