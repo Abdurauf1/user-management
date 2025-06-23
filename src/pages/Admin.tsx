@@ -1,21 +1,22 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { api } from "../api/api";
 import { Person, PersonSlash, Trash3, BoxArrowRight } from "react-bootstrap-icons";
 import { ToastContainer, toast } from "react-toastify";
 import { ButtonComponent, Checkbox, Loading } from "../components";
 import { InitialState } from "../types";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import API from "../api/api";
 
 const AdminPage = () => {
   const [data, setData] = useState<InitialState[]>([]);
   const [isLoading, setisLoading] = useState<boolean>(true);
-  const [isCheckAll, setIsCheckAll] = useState<boolean>(false);
-  const [isCheck, setIsCheck] = useState<any[]>([]);
+  const [isCheckedAll, setIsCheckedAll] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<any[]>([]);
+  const navigate = useNavigate()
 
   const loadData = async () => {
-    await axios
-      .get(`${api}/users/`)
+    await API
+      .get(`/users/`)
       .then(response => {
         setData(response.data);
         setisLoading(false);
@@ -24,33 +25,35 @@ const AdminPage = () => {
   };
 
   const handleSelectAll = () => {
-    setIsCheckAll(!isCheckAll);
-    setIsCheck(data.map((user: InitialState) => user._id));
-    if (isCheckAll) {
-      setIsCheck([]);
+    setIsCheckedAll(!isCheckedAll);
+    setIsChecked(data.map((user: InitialState) => user._id));
+    if (isCheckedAll) {
+      setIsChecked([]);
     }
   };
 
   const handleSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
-    setIsCheck([...isCheck, id]);
+    setIsChecked([...isChecked, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter((userId: string) => userId !== id));
+      setIsChecked(isChecked.filter((userId: string) => userId !== id));
     }
-    setIsCheckAll(false);
+    setIsCheckedAll(false);
   };
 
   const blockUser = () => {
-    const status = "blocked";
-    isCheck.map((id: string) => {
-      axios
-        .put(`${api}/users/status/${id}`, {
-          status,
+    const activityStatus = "blocked";
+    isChecked.map((id: string) => {
+      API
+        .put(`/users/status/${id}`, {
+          activityStatus,
         })
         .then(response => {
           if (response.data.success) {
             toast.error("User blocked successfully", { autoClose: 2500 });
             loadData();
+            setIsChecked([]);
+            setIsCheckedAll(false)
           }
         })
         .catch(error => console.log(error));
@@ -58,16 +61,18 @@ const AdminPage = () => {
   };
 
   const unblockUser = () => {
-    const status = "active";
-    isCheck.map((id: string) => {
-      axios
-        .put(`${api}/users/status/${id}`, {
-          status,
+    const activityStatus = "active";
+    isChecked.map((id: string) => {
+      API
+        .put(`/users/status/${id}`, {
+          activityStatus,
         })
         .then(response => {
           if (response.data.success) {
             toast.success("User unblocked successfully", { autoClose: 2500 });
             loadData();
+            setIsChecked([]);
+            setIsCheckedAll(false)
           }
         })
         .catch(error => console.log(error));
@@ -75,13 +80,15 @@ const AdminPage = () => {
   };
 
   const deleteUser = () => {
-    isCheck.map((id: string) => {
-      axios
-        .delete(`${api}/users/delete/${id}`)
+    isChecked.map((id: string) => {
+      API
+        .delete(`/users/delete/${id}`)
         .then(response => {
           if (response.data.success) {
             toast.success("User deleted successfully", { autoClose: 2500 });
             loadData();
+            setIsChecked([]);
+            setIsCheckedAll(false)
           }
         })
         .catch(error => console.log(error));
@@ -90,12 +97,12 @@ const AdminPage = () => {
 
   const signOut = () => {
     sessionStorage.clear();
-    location.reload();
+    navigate("/login")
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   return (
     <Container className="my-4">
@@ -126,7 +133,7 @@ const AdminPage = () => {
                   name="selectAll"
                   id="selectAll"
                   onChange={handleSelectAll}
-                  isChecked={isCheckAll}
+                  isChecked={isCheckedAll}
                 />
               </th>
               <th>No</th>
@@ -149,7 +156,7 @@ const AdminPage = () => {
                       name={name}
                       id={_id}
                       onChange={handleSelect}
-                      isChecked={isCheck.includes(_id)}
+                      isChecked={isChecked.includes(_id)}
                     />
                   </td>
                   <td>{index + 1}</td>

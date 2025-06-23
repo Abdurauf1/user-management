@@ -1,10 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { api } from "../api/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { InitialState } from "../types";
-import axios from "axios";
+import API from "../api/api";
 
 // global time and date function
 const now = new Date();
@@ -28,13 +27,14 @@ const initialState: InitialState = {
 
 const Register = () => {
   const [state, setState] = useState<InitialState>(initialState);
+  const navigate = useNavigate()
 
   const { name, email, password, reg_time, login_time, activityStatus } = state;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    axios
-      .post(`${api}/register/`, {
+    API
+      .post(`/register/`, {
         name,
         email,
         password,
@@ -50,7 +50,7 @@ const Register = () => {
             autoClose: 1000,
           });
           setTimeout(() => {
-            location.href = "/";
+            navigate("/login")
           }, 1500);
         }
       })

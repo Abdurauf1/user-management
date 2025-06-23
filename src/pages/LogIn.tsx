@@ -1,10 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { api } from "../api/api";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { timeAndDate } from "./Register";
-import axios from "axios";
+import API from "../api/api";
 
 const initialState = {
   email: "",
@@ -14,12 +13,13 @@ const initialState = {
 
 const LogIn = () => {
   const [user, setUser] = useState(initialState);
+  const navigate = useNavigate()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { email, password, login_time } = user;
-    axios
-      .post(`${api}/login/`, {
+    API
+      .post(`/login/`, {
         email,
         password,
         login_time,
@@ -28,8 +28,7 @@ const LogIn = () => {
         const token = response.data.data;
         if (response.data.success) {
           sessionStorage.setItem("token", token);
-          sessionStorage.setItem("isLoggedIn", "true");
-          location.reload();
+          navigate("/")
         } else {
           toast.error(response.data.message, { autoClose: 2500 });
         }
@@ -37,6 +36,7 @@ const LogIn = () => {
       .catch(error => console.log(error));
     setUser(initialState);
   };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
